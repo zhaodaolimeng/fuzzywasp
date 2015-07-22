@@ -52,40 +52,45 @@ float gyro_offset;
 
 void IMUAppTask(void * param){
 
+//	I2C_IF_Open(I2C_MASTER_MODE_FST);
 	I2C_IF_Open(I2C_MASTER_MODE_FST);
 	Report("Start to init MPU9150...\n\r");
 	MPU9150_init();
 	Report("MPU9150 init OK!\n\r");
 
-	// Enable timer A peripheral
-	MAP_PRCMPeripheralClkEnable(PRCM_TIMERA1, PRCM_RUN_MODE_CLK);
-	MAP_PRCMPeripheralReset(PRCM_TIMERA1);
 
-	// Configure one channel for periodic interrupts
-	MAP_TimerConfigure(TIMERA1_BASE,
-			TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_PERIODIC);
-	MAP_TimerPrescaleSet(TIMERA1_BASE, TIMER_A, IMU_CONTROLLER_PRESCALER);
+	// FIXME how to share the TIMER_A with PWM?
+	// We can not use the following code with interuption mask ...
+	// for they we stop PWM and camera from working
 
-	// Set timeout interrupt
-	MAP_TimerIntRegister(TIMERA1_BASE, TIMER_A, ControllerIntHandler);
-	MAP_TimerIntEnable(TIMERA1_BASE, TIMER_TIMA_TIMEOUT);
+//	// Enable timer A peripheral
+//	MAP_PRCMPeripheralClkEnable(PRCM_TIMERA1, PRCM_RUN_MODE_CLK);
+//	MAP_PRCMPeripheralReset(PRCM_TIMERA1);
+//
+//	// Configure one channel for periodic interrupts
+//	MAP_TimerConfigure(TIMERA1_BASE,
+//			TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_PERIODIC);
+//	MAP_TimerPrescaleSet(TIMERA1_BASE, TIMER_A, IMU_CONTROLLER_PRESCALER);
+//
+//	// Set timeout interrupt
+//	MAP_TimerIntRegister(TIMERA1_BASE, TIMER_A, ControllerIntHandler);
+//	MAP_TimerIntEnable(TIMERA1_BASE, TIMER_TIMA_TIMEOUT);
+//
+//	// Turn on timers
+//	MAP_TimerLoadSet(TIMERA1_BASE, TIMER_A, IMU_CONTROLLER_STARTUP);
+//	MAP_TimerEnable(TIMERA1_BASE, TIMER_A);
 
-	// Turn on timers
-	MAP_TimerLoadSet(TIMERA1_BASE, TIMER_A, IMU_CONTROLLER_STARTUP);
-	MAP_TimerEnable(TIMERA1_BASE, TIMER_A);
-
-//	while(1){
-//		ControllerIntHandler();
-//		MAP_UtilsDelay(80000000);
-//	}
+	while(1){
+		ControllerIntHandler();
+		MAP_UtilsDelay(8000000);
+	}
 }
 
 
 /* Controller Interrupt routine */
 void ControllerIntHandler(void) {
 	/* Clear interrupt flag */
-	HWREG(TIMERA1_BASE + TIMER_O_ICR) = 0x1;
-
+//	HWREG(TIMERA1_BASE + TIMER_O_ICR) = 0x1;
 	/* Get sensors */
 	gyro_angle = (MPU9150_readSensor_2byte(MPU9150_GYRO_XOUT_L,
 			MPU9150_GYRO_XOUT_H) - gyro_offset) / GYRO_NORM;

@@ -144,21 +144,17 @@ void SetupTimerPWMMode(unsigned long ulBase, unsigned long ulTimer,
 void InitPWMModules()
 {
     //
-    // Initialization of timers to generate PWM output
-    //
-    MAP_PRCMPeripheralClkEnable(PRCM_TIMERA2, PRCM_RUN_MODE_CLK);
-    MAP_PRCMPeripheralClkEnable(PRCM_TIMERA3, PRCM_RUN_MODE_CLK);
-
-    //
     // TIMERA2 (TIMER B) as RED of RGB light. GPIO 9 --> PWM_5
     //
     SetupTimerPWMMode(TIMERA2_BASE, TIMER_B,
             (TIMER_CFG_SPLIT_PAIR | TIMER_CFG_B_PWM), 1);
+
     //
     // TIMERA3 (TIMER B) as YELLOW of RGB light. GPIO 10 --> PWM_6
     //
     SetupTimerPWMMode(TIMERA3_BASE, TIMER_A,
             (TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_PWM | TIMER_CFG_B_PWM), 1);
+
     //
     // TIMERA3 (TIMER A) as GREEN of RGB light. GPIO 11 --> PWM_7
     //
