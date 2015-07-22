@@ -1,0 +1,7 @@
+#Tue Oct 21 10:09:10 GMT+08:00 2014
+capacity=1MB
+com=6
+interface=CC31x Flash Connections
+device=CC31x Flash Devices
+secure=false
+alert=false

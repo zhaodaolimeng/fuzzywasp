@@ -1,0 +1,1 @@
+"./i2c_if.obj" "./i2cconfig.obj" "./main.obj" "./network_if.obj" "./pinmux.obj" "./startup_ccs.obj" "./uart_if.obj" "./udma_if.obj" "./task/blink_app.obj" "./task/camera_app.obj" "./task/httpserverapp.obj" "./task/imu_app.obj" "./driver/MPU9150.obj" "./driver/mt9d111.obj" "../cc3200v1p32.cmd" -l"libc.a" -ldriverlib.a -lfree_rtos.a -lwebserver.a -lsimplelink.a 
